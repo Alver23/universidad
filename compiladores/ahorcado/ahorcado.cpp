@@ -28,6 +28,8 @@ void intento9();
 void dibujar_muneco();
 void getWordByLevel(int opt);
 void helpOne();
+void helpTwo();
+void helpThree();
 void getHelp( int opt);
 void isHelp();
 int obtener_numero_aleatorio(int b);
@@ -49,6 +51,7 @@ int main()
 		mostrar();
 		while(vidas > 0 && palabra_original != palabra_mostrar) {
 			char x;
+			cout << "Escriba una palabra" << endl;
 			cin >> x;
 			ingresar(x);
 			mostrar();
@@ -77,9 +80,11 @@ void mostrar()
 	if (ayuda == 1)
 	{
 		opt = menuHelp();
-		printf("%d la opcion q escojio es \n", opt);
 		getHelp(opt);
+		cout << palabra_mostrar << endl;
 	}
+	
+	
 }
 
 void inicializar()
@@ -156,6 +161,7 @@ void ingresar(char x)
 	{
 		points-=optLevel;
 		vidas--;
+		isHelp();
 
 	} else {
 		acertadas++;
@@ -200,7 +206,7 @@ void dibujar_muneco()
 	switch(vidas) {
 		case 1:
 			intento1();
-			isHelp();
+			//isHelp();
 			break;
 		case 2:
 			intento2();
@@ -219,15 +225,15 @@ void dibujar_muneco()
 			break;
 		case 7:
 			intento7();
-			isHelp();
+			//isHelp();
 			break;
 		case 8:
 			intento8();
-			isHelp();
+			//isHelp();
 			break;
 		case 9:
 			intento9();
-			
+			//isHelp();
 			break;
 	}
 }
@@ -397,6 +403,7 @@ int menuHelp()
 	cout << "1. Primera letra" << endl;
 	cout << "2. Ultima letra" << endl;
 	cout << "3. Letra aleatoria" << endl;
+	cin >> opt;
 	return opt;
 }
 
@@ -407,26 +414,31 @@ void getHelp(int opt)
 			helpOne();
 			break;
 		case 2:
-			helpOne();
+			helpTwo();
 			break;
 		case 3:
-			helpOne();
+			helpThree();
 			break;
 	}
 }
 
 void helpOne()
 {
-	for (int i = 0; i < palabra_original.length(); ++i)
-	{
-		cout << "help ne" << i << endl;
-		if (i == 1)
-		{
-			palabra_mostrar[i] = palabra_original[i];
-			//ayuda = 0;
-			break;
-		}
-	}
+	
+	palabra_mostrar[0] = palabra_original[0];
+	ayuda = 0;
+}
+
+void helpTwo()
+{
+	palabra_mostrar[palabra_original.length() - 1] = palabra_original[palabra_original.length() - 1];
+	ayuda = 0;	
+}
+
+void helpThree()
+{
+	palabra_mostrar[obtener_numero_aleatorio(palabra_original.length())] = palabra_original[obtener_numero_aleatorio(palabra_original.length())];
+	ayuda = 0;	
 }
 
 void isHelp()
