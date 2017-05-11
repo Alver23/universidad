@@ -1,0 +1,4 @@
+bateria
+computador
+pantallas
+cargador

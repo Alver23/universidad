@@ -7,8 +7,15 @@ using namespace std;
 string palabra_original;
 string palabra_mostrar;
 string nombre_jugador;
-int vidas;
-int optHelp;
+int vidas = 10;
+int optLevel;
+int acertadas = 0;
+int points = 0;
+int ayuda = 0;
+bool nextLevel = false;
+bool help1 = false;
+bool help2 = false;
+bool help3 = false;
 
 void mostrar();
 void ingresar(char x);
@@ -23,23 +30,40 @@ void intento7();
 void intento8();
 void intento9();
 void dibujar_muneco();
+void getWordByLevel(int opt);
+void helpOne();
+void helpTwo();
+void helpThree();
+void getHelp( int opt);
+void isHelp();
 int obtener_numero_aleatorio(int b);
+int menuLevel();
 int menuHelp();
-string obtener_palabra_aleatoria();
-vector <string> obtener_colleccion_de_palabras();
+int getPoints(int opt);
+string obtener_palabra_aleatoria(string fileName);
+string getFile(string fileName);
+vector <string> obtener_colleccion_de_palabras(string fileName);
 
 int main()
 {
-	inicializar();
-	mostrar();
-	while(vidas > 0 && palabra_mostrar != palabra_original) {
-		char x;
-		cin >> x;
-		ingresar(x);
+	optLevel = menuLevel();
+	do
+	{
+		getWordByLevel(optLevel);
+		inicializar();
 		mostrar();
-		optHelp = menuHelp();
-	}
-	
+		while(vidas > 0 && palabra_original != palabra_mostrar) {
+			char x;
+			cout << "Escriba una palabra" << endl;
+			cin >> x;
+			ingresar(x);
+			mostrar();
+			nextLevel = false;
+		}
+		palabra_mostrar = "";
+		optLevel++;
+		nextLevel = true;
+	} while (optLevel != 6);
 	
 	if (vidas > 0) {
 		cout << "ganaste " << endl;
@@ -50,15 +74,31 @@ int main()
 
 void mostrar()
 {
-	cout << "Vidas: " << vidas << endl;
+	int opt;
+	cout << "\n" << endl;
+	cout << "Oportunidades Restantes: " << vidas << endl;
+	cout << "Letras Acertadas:" << acertadas << endl;
+	cout << "Puntaje:" << points << endl;
 	cout << palabra_mostrar << endl;
+	cout << "\n" << endl;
+	switch (ayuda) {
+		case 1:
+			opt = menuHelp();
+			getHelp(opt);
+			cout << palabra_mostrar << endl;
+			cout << "\n" << endl;
+			break;
+		default:
+			//cout << "Sin ayuda";
+			break;
+	}
 	dibujar_muneco();
+	cout << "\n" << endl;
 }
 
 void inicializar()
-{
-	vidas = 10;
-	palabra_original = obtener_palabra_aleatoria();
+{	
+	//palabra_original = obtener_palabra_aleatoria();
 	
 	// convertimos la palabra original en miniscula
 	for (int i = 0; i < palabra_original.length(); i++)
@@ -73,10 +113,45 @@ void inicializar()
 	{
 		if (palabra_original[i] >= 'a' && palabra_original[i] <= 'z') 
 		{
-			palabra_mostrar+='\n -';
+			palabra_mostrar+='-';
 		} else {
 			palabra_mostrar+= palabra_original[i];
 		}
+	}
+}
+
+void getWordByLevel(int opt)
+{
+	switch (opt) {
+		case 1:
+			cout << "Nivel 1 (Novato)" << endl;
+			points += getPoints(opt);
+			palabra_original = getFile("levelOne.txt");
+			break;
+		case 2:
+			cout << "Nivel 2 (Principiante)" << endl;
+			points += getPoints(opt);
+			palabra_original = getFile("levelTwo.txt");
+			break;
+		case 3:
+			cout << "Nivel 3 (Intermedio) " << endl;
+			points += getPoints(opt);
+			palabra_original = getFile("levelThree.txt");
+			break;
+		case 4:
+			cout << "Nivel 4 (Pro)" << endl;
+			points += getPoints(opt);
+			palabra_original = getFile("levelFour.txt");
+			break;
+		case 5:
+			cout << "Nivel 5 (Legendario)" << endl;
+			points += getPoints(opt);
+			palabra_original = getFile("levelFive.txt");
+			break;
+		default:
+			cout << "opción no valida, comenzara en el nivel 1 (Novato)" << endl;
+			palabra_original = getFile("levelOne.txt");
+			break;
 	}
 }
 
@@ -94,33 +169,32 @@ void ingresar(char x)
 	
 	if (perdiVidas)
 	{
+		points-=optLevel;
 		vidas--;
+		isHelp();
+
+	} else {
+		acertadas++;
 	}
 }
 
-string obtener_palabra_aleatoria()
+string obtener_palabra_aleatoria(string fileName)
 {
-	vector <string> palabras = obtener_colleccion_de_palabras();
+	vector <string> palabras = obtener_colleccion_de_palabras(fileName);
 	int numero_aleatorio = obtener_numero_aleatorio(palabras.size());
-	return palabras[3];
+	return palabras[numero_aleatorio];
 }
 
-vector <string> obtener_colleccion_de_palabras()
+vector <string> obtener_colleccion_de_palabras(string fileName)
 {
 	vector<string> palabras;
-	ifstream file_input_stream("palabras.txt");
+	ifstream file_input_stream(fileName);
 
 	string palabra;
 	while (file_input_stream >> palabra) {
 		palabras.push_back(palabra);
 	}
 	file_input_stream.close();
-	/*palabras.push_back("palabra");
-	palabras.push_back("cama");
-	palabras.push_back("computador");
-	palabras.push_back("bateria");
-	palabras.push_back("carro rojo");
-	*/
 	return palabras;
 }
 
@@ -162,6 +236,20 @@ void dibujar_muneco()
 			intento9();
 			break;
 	}
+}
+
+string getFile(string fileName) {
+	return obtener_palabra_aleatoria(fileName);
+}
+
+int getPoints(int opt)
+{
+	int res = 0;
+	if (nextLevel)
+	{
+		res = opt * 10;
+	}
+	return res;
 }
 
 void intento9()
@@ -295,15 +383,116 @@ void intento1()
 	cout<<"|--------------"<<endl;
 }
 
+int menuLevel()
+{
+	int opt;
+	cout << "\n" << endl;
+	cout << "|------------------------------------------------------------|" << endl;
+	cout << "|Seleccione el nivel de dificultad por el cual quiere empezar|" << endl;
+	cout << "|------------------------------------------------------------|" << endl;
+	cout << "1.Novato" << endl;
+	cout << "2.Principiante" << endl;
+	cout << "3.Intermedio" << endl;
+	cout << "4.Pro" << endl;
+	cout << "5.Legendario" << endl;
+	cout << "\n" << endl;
+	cin >> opt;
+	return opt;
+}
+
 int menuHelp()
 {
 	int opt;
-	cout << "SELECCIONE EL NIVEL DE DIFICULTAD" << endl;
-	cout << "1.NOBATO" << endl;
-	cout << "2.PRINCIPIANTE" << endl;
-	cout << "3.INTERMEDIO" << endl;
-	cout << "4.PRO" << endl;
-	cout << "5.LEGENDARIO" << endl;
+	cout << "\n" << endl;
+	cout << "|------------------------------------------------------------|" << endl;
+	cout << "|            Seleccione la ayuda que desea recibir           |"<< endl;
+	cout << "|------------------------------------------------------------|" << endl;
+	cout << "1. Las dos primeras letras" << endl;
+	cout << "2. Las dos ultimas letra" << endl;
+	cout << "3. Dos letras aleatoria" << endl;
 	cin >> opt;
 	return opt;
+}
+
+void getHelp(int opt)
+{
+	switch(opt) {
+		case 1:
+			if (help1)
+			{
+				cout << "Usted ya utilizo esta ayuda" << endl;
+			} else {
+				helpOne();
+			}
+			break;
+		case 2:
+			if (help1)
+			{
+				cout << "Usted ya utilizo esta ayuda" << endl;
+			} else {
+				helpTwo();
+			}
+			break;
+		case 3:
+			if (help1)
+			{
+				cout << "Usted ya utilizo esta ayuda" << endl;
+			} else {
+				helpThree();
+			}
+			break;
+		default:
+			cout << "Opcion incorrecta" << endl;
+			break;
+	}
+}
+
+void helpOne()
+{
+	
+	palabra_mostrar[0] = palabra_original[0];
+	palabra_mostrar[1] = palabra_original[1];
+	ayuda = 0;
+	help1 = true;
+}
+
+void helpTwo()
+{
+	palabra_mostrar[palabra_original.length() - 1] = palabra_original[palabra_original.length() - 1];
+	palabra_mostrar[palabra_original.length() - 2] = palabra_original[palabra_original.length() - 2];
+	ayuda = 0;
+	help2 = true;
+}
+
+void helpThree()
+{
+	int cont = 0;
+	int inicio = obtener_numero_aleatorio(palabra_mostrar.length());
+	for (int j = 0; j < inicio.length(); j++)
+	{
+
+		if (palabra_mostrar[j] == '-')
+		{
+			if (cont < 2) 
+			{
+				palabra_mostrar[j] = palabra_original[j];
+			}
+			cont++;
+		}
+	}
+	//palabra_mostrar[obtener_numero_aleatorio(palabra_original.length())] = palabra_original[obtener_numero_aleatorio(palabra_original.length())];
+	ayuda = 0;
+	help3 = true;
+}
+
+void isHelp()
+{
+	cout << "\n" << endl;
+	cout << "|------------------|" << endl;
+	cout << "| Desea Una Ayuda ?|" << endl;
+	cout << "|------------------|" << endl;
+	cout << "1. Si" << endl;
+	cout << "2. No" << endl;
+	cout << "\n" << endl;
+	cin >> ayuda;
 }
