@@ -182,7 +182,7 @@ string obtener_palabra_aleatoria(string fileName)
 {
 	vector <string> palabras = obtener_colleccion_de_palabras(fileName);
 	int numero_aleatorio = obtener_numero_aleatorio(palabras.size());
-	return palabras[numero_aleatorio];
+	return palabras[0];
 }
 
 vector <string> obtener_colleccion_de_palabras(string fileName)
@@ -191,10 +191,23 @@ vector <string> obtener_colleccion_de_palabras(string fileName)
 	ifstream file_input_stream(fileName);
 
 	string palabra;
-	while (file_input_stream >> palabra) {
+	/*while (file_input_stream >> palabra) {
+		cout << palabra << endl;
 		palabras.push_back(palabra);
 	}
-	file_input_stream.close();
+
+	string line;*/
+	ifstream myfile (fileName);
+	if (myfile.is_open())
+	{
+		while ( getline (myfile,palabra) )
+		{
+			palabras.push_back(palabra);
+			cout << palabra << '\n';
+		}
+		myfile.close();
+	}
+	//file_input_stream.close();
 	return palabras;
 }
 
@@ -468,7 +481,7 @@ void helpThree()
 {
 	int cont = 0;
 	int inicio = obtener_numero_aleatorio(palabra_mostrar.length());
-	for (int j = 0; j < inicio.length(); j++)
+	for (int j = 0; j < palabra_mostrar.length(); j++)
 	{
 
 		if (palabra_mostrar[j] == '-')
