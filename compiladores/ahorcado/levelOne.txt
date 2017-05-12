@@ -1,4 +1,3 @@
-bateria de un carro
-computador
-pantallas
-cargador
+Carro
+Azul
+Caballo

@@ -16,6 +16,7 @@ bool nextLevel = false;
 bool help1 = false;
 bool help2 = false;
 bool help3 = false;
+bool help4 = false;
 
 void mostrar();
 void ingresar(char x);
@@ -34,8 +35,10 @@ void getWordByLevel(int opt);
 void helpOne();
 void helpTwo();
 void helpThree();
+void helpFour();
 void getHelp( int opt);
 void isHelp();
+void getFileHelp(string fileName);
 int obtener_numero_aleatorio(int b);
 int menuLevel();
 int menuHelp();
@@ -182,7 +185,7 @@ string obtener_palabra_aleatoria(string fileName)
 {
 	vector <string> palabras = obtener_colleccion_de_palabras(fileName);
 	int numero_aleatorio = obtener_numero_aleatorio(palabras.size());
-	return palabras[0];
+	return palabras[numero_aleatorio];
 }
 
 vector <string> obtener_colleccion_de_palabras(string fileName)
@@ -191,23 +194,12 @@ vector <string> obtener_colleccion_de_palabras(string fileName)
 	ifstream file_input_stream(fileName);
 
 	string palabra;
-	/*while (file_input_stream >> palabra) {
-		cout << palabra << endl;
+	while (file_input_stream >> palabra) {
 		palabras.push_back(palabra);
 	}
 
-	string line;*/
-	ifstream myfile (fileName);
-	if (myfile.is_open())
-	{
-		while ( getline (myfile,palabra) )
-		{
-			palabras.push_back(palabra);
-			cout << palabra << '\n';
-		}
-		myfile.close();
-	}
-	//file_input_stream.close();
+	
+	file_input_stream.close();
 	return palabras;
 }
 
@@ -423,6 +415,7 @@ int menuHelp()
 	cout << "1. Las dos primeras letras" << endl;
 	cout << "2. Las dos ultimas letra" << endl;
 	cout << "3. Dos letras aleatoria" << endl;
+	cout << "4. Descripcion de la palabra" << endl;
 	cin >> opt;
 	return opt;
 }
@@ -439,7 +432,7 @@ void getHelp(int opt)
 			}
 			break;
 		case 2:
-			if (help1)
+			if (help2)
 			{
 				cout << "Usted ya utilizo esta ayuda" << endl;
 			} else {
@@ -447,11 +440,19 @@ void getHelp(int opt)
 			}
 			break;
 		case 3:
-			if (help1)
+			if (help3)
 			{
 				cout << "Usted ya utilizo esta ayuda" << endl;
 			} else {
 				helpThree();
+			}
+			break;
+		case 4:
+			if (help4)
+			{
+				cout << "Usted ya utilizo esta ayuda" << endl;
+			} else {
+				helpFour();
 			}
 			break;
 		default:
@@ -498,6 +499,14 @@ void helpThree()
 	help3 = true;
 }
 
+void helpFour()
+{
+	string fileName = "helps/" + palabra_original + ".txt";
+	getFileHelp(fileName);
+	ayuda = 0;
+	help4 = true;
+}
+
 void isHelp()
 {
 	cout << "\n" << endl;
@@ -508,4 +517,19 @@ void isHelp()
 	cout << "2. No" << endl;
 	cout << "\n" << endl;
 	cin >> ayuda;
+}
+
+
+void getFileHelp(string fileName)
+{
+	string line;
+	ifstream myfile (fileName);
+	if (myfile.is_open())
+	{
+		while ( getline (myfile,line) )
+		{
+			cout << line << '\n';
+		}
+		myfile.close();
+	}
 }

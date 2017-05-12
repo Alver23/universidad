@@ -1,4 +1,3 @@
-bateria
-computador
-pantallas
-cargador
+sistemas
+cedula
+bigdata
