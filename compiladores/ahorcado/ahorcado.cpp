@@ -39,6 +39,7 @@ void helpFour();
 void getHelp( int opt);
 void isHelp();
 void getFileHelp(string fileName);
+void welcome();
 int obtener_numero_aleatorio(int b);
 int menuLevel();
 int menuHelp();
@@ -49,6 +50,7 @@ vector <string> obtener_colleccion_de_palabras(string fileName);
 
 int main()
 {
+	welcome();
 	optLevel = menuLevel();
 	do
 	{
@@ -532,4 +534,28 @@ void getFileHelp(string fileName)
 		}
 		myfile.close();
 	}
+}
+
+void welcome()
+{
+	cout <<  "\t ******************************************" << endl;
+	cout <<  "\t **** Bienvenido al juego del ahorcado ****" << endl;
+	cout <<  "\t ******************************************" << endl;
+	cout <<  "\n" << endl;
+	cout <<  "\t ********* Importante **********" << endl;
+	cout <<  "\t **** Condiciones del Juego ****" << endl;
+	cout <<  "\t *******************************" << endl;
+	cout << "Cada Nivel tiene un puntaje que suma amedida que avanza en el juego" << endl;
+	cout << "y la ayuda utilizada no es posible volverla a usar" << endl;
+	cout << "Los puntajes del juego son los siguientes:" << endl;
+	cout << "- Nivel 1 (uno): Si el jugador digita la palabra correcta gana 10 punto," << endl;
+	cout << "si digita una letra incorrecta, pierde 1 punto. \n" << endl;
+	cout << "- Nivel 2 (dos): Si el jugador digita la palabra correcta gana 20 puntos," << endl;
+	cout << "si digita una letra incorrecta, pierde 2 puntos.\n" << endl;
+	cout << "- Nivel 3 (uno): Si el jugador digita la palabra correcta gana 30 punto," << endl;
+	cout << "si digita una letra incorrecta, pierde 3 puntos.\n" << endl;
+	cout << "- Nivel 4 (dos): Si el jugador digita la palabra correcta gana 40 puntos," << endl;
+	cout << "si digita una letra incorrecta, pierde 4 puntos.\n" << endl;
+	cout << "- Nivel 5 (dos): Si el jugador digita la palabra correcta gana 50 puntos," << endl;
+	cout << "si digita una letra incorrecta, pierde 5 puntos.\n" << endl;
 }
